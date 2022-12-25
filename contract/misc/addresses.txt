@@ -1,0 +1,47 @@
+TESTNET Binance:
+
+Vessel          - ###
+BUSD            - 0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7
+
+------------------------------------------------------------
+
+Ethereum        - 0x8BaBbB98678facC7342735486C851ABD7A0d17Ca 
+BNB             - 0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd
+
+=============================================================
+
+TESTNET Uniswap:
+
+Vessel          - ###
+
+=============================================================
+
+ACTUAL BSC:
+
+------------------------------------------------------------
+
+Vessel          - ###
+BUSD            - 0xe9e7cea3dedca5984780bafc599bd69add087d56
+
+------------------------------------------------------------
+
+Ethereum        - 0x2170Ed0880ac9A755fd29B2688956BD959F933F8
+Cardano         - 0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47
+BNB             - 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c
+Polkadot        - 0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402
+Uniswap         - 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984
+Avalanche       - 0x1CE0c2827e2eF14D5C4f29a091d735A204794041
+Chainlink       - 0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD
+Litecoin        - 0x4338665CBB7B2485A8855A139b75D5e34AB0DB94   
+Bitcoin Cash    - 0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf
+Polygon         - 0xCC42724C6683B7E57334c4E856f4c9965ED682bD
+Filecoin        - 0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153
+Cosmos          - 0x0Eb3a705fc54725037CC9e008bDede697f62F335
+Tezos           - 0x16939ef78684453bfDFb47825F8a5F714f12623a
+Fantom          - 0xAD29AbB318791D579433D831ed122aFeAf29dcfe
+Elrond          - 0xbF7c81FFF98BbE61B40Ed186e4AfD6DDd01337fe
+EOS             - 0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6
+Aave            - 0xfb6115445Bff7b52FeB98650C87f44907E58f802
+Harmony One     - 0x03fF0ff224f904be3118461335064bB48Df47938
+Compound        - 0x52CE071Bd9b1C4B00A0b92D298c512478CaD67e8
+Yearn           - 0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e
