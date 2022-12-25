@@ -6,7 +6,9 @@
 
 https://vessel.finance/
 
-This is a collaborative project amidst the individuals mentioned in the docs.
+### Collaborators and Contributors
+
+This is a collaborative project between the individuals mentioned in the docs
 
 ### Repo Structure
 
