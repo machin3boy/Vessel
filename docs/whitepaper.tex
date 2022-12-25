@@ -1,0 +1,248 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{placeins}
+\usepackage{amsmath}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{amssymb}
+
+\title{Tokenized Deflationary Mutual Fund Based on Synthetic Pools}
+\author{version 0.2.4}
+\date{August 16, 2021}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Introduction}
+    
+   \indent
+   Mutual funds, index funds, and ETFs are all traditional instruments for investors to allocate their money into a diversified basket of goods, bonds, securities, etc., in a cost-effective, sensible way that may be difficult to individually recreate asset by asset. They proliferate, and are advantageous, because they diversify and balance out risk, are a way of passively investing, and because, on average, an aggregate or an index is likely to outperform the market in comparison to an individual asset. \par
+   
+   \vspace{.15cm}
+   
+   The turbulent evolution of the cryptocurrency world, accelerated in part thanks to powerful Turing-Complete languages such as Ethereum, brought about thousands of new coins and new functionalities such as DAO, lending, yield farming, staking, NFTs, with many myriad potential applications in the world of DeFi still yet to be discovered. This makes considerations of the advantages offered by mutual funds, index funds, and ETFs sensible in the context of the evolving cryptocurrency market. Given that thousands of coins are now made per year, it could be daunting to keep track of the market, and thus, a single token with the functionality of a well-managed mutual fund would fulfill the purpose of a low-risk diversified investment into a pool of assets that can be thought of as a passive investment into the market or asset class as a whole. Of course, however, we would not be the first to make this consideration or suggestion. Our proposed token differs in a number of key ways. First and foremost, our token serves to create a truly decentralized mutual fund with governance votes and DAO over how the fund evolves over epochs. Another point of differentiation is that our token leverages the power of burn mechanisms to incentivize holders and investors with deflationary mechanics both with transaction and supply burns. Lastly, in contrast with how traditional mutual funds function, we leverage utilities known as oracles to give us price feeds and create a synthetic reserve pool of assets and stable-coins to hedge the risk of the mutual fund and to "cushion" a market down-trend in addition to accelerating the growth of the mutual fund during a market up-trend in a manner we will elaborate upon shortly.  \par
+   
+
+\section{Breakdown of an Individual Transaction}
+    
+    \vspace{0.25cm}
+    
+    \begin{figure}[!htb]
+        \centering
+        \includegraphics[scale=0.44]{transaction.png}
+        \caption{Components of an Individual Transaction}
+        \label{fig:my_label}
+    \end{figure}
+    
+    \indent
+    Let us first consider the components of an individual transaction in our protocol as per the subsequent figure 1. Whenever a transaction takes place, it has an associated burn fee \emph{b} that plays the role of contributing to a reward pool, a rebase pool, and a governance reward pool, in addition to contributing to a fraction that is simply burnt forever. Thus, \emph{b} is further broken up into \emph{r} (reward pool component), \emph{p} (rebase pool component), \emph{g} (governance pool component), and \emph{f} (fraction of the burn that is burnt forever). \par
+    
+    \vspace{0.15cm}
+    
+    \indent
+    Each of the above serve an individual function, and as their names suggest, \emph{r} is the component of the burn that is allocated towards rewards for token holders, \emph{p} is the component of the burn that is placed into the pool that rebases the value of the token to calibrate the mutual fund, \emph{f} is the component of the burn that is present to provide a deflationary pressure on the token value, and, finally, \emph{g} is the component of the burn that is placed into a governance pool to reward governance token holders. \par
+    
+    \nopagebreak
+
+    
+\section{Rebase Pool, Reward Pool, Governance Pool, and Yield Farming}
+
+    
+    \begin{figure}[!htb]
+        \centering
+        \includegraphics[scale=0.42]{pools.png}
+        \caption{Transfer of Burn Components Into Corresponding Pools}
+        \label{fig:my_label}
+    \end{figure}    
+
+    With the exception of component \emph{f}, all burn components are transferred into their corresponding pools as per figure 2. We now examine how they work.  \par
+    
+    \vspace{0.15cm}
+    \subsection{Rebase Pool}
+    The function of the rebase pool is to mimic traditional closed fund solutions and purely elastic supply models in the implementation of a mutual fund. Since our mutual fund is decentralized and there is no hedge fund manager or "pure" market forces to adjust the value of the token dependent on the underlying assets' values, this function is delegated to the rebase pool with a smart contract. The rebase pool, in effect, is therefore responsible for matching the value of the token we provide with what it artificially encapsulates. It consists of two components: the stablecoin pool and the reserve tokens pool. The smart contract replenishes these two pools, and upon the end of an epoch, recalibrates the value of the token by either buying or selling the reserves to mirror the price movement of the underlying assets with the help of oracles. We will further examine the rebase protocol itself, as well as the oracle-backed synthetic wrapper, in subsequent sections, however at this juncture we should note that considering \emph{b} is substantially smaller than the actual transaction (as it is a fraction of it), a problem arises in creating a rebase pool of a size large enough to influence the value of the token in a truly consequential manner. \par
+    
+    
+    \vspace{0.15cm}
+        In the initial phase of the project, the rebase pool will simply be
+    too small to have any significant influence on the price of the wrapper (the token itself)
+    with fluctuations of the underlying assets in the market as there will not
+    be enough reserves. Additionally, if we were to pursue the route of
+    market selling the reserve tokens for stablecoins to maintain a ratio
+    within some given threshold, we would create downward pressure on the
+    price of our own coin and disincentivize investors. This can be mitigated
+    in several ways. \par
+    
+    \vspace{0.15cm}
+    One solution entails creating a stablecoin yield farm where liquidity must be locked for some pre-specified period, whereby rewards can be collected from the reward pool. An additional option would be to create a contract with which users could, for a limited time, swap a stablecoin for our token which would burn fraction \emph{x} of the transaction amount as opposed to \emph{b} whereby \emph{x} $<$ \emph{b} to incentivize stablecoin purchases since users would gain more for their dollar value. This would grow the stablecoin portion of the rebase pool and appreciate the price of the token, but since this is merely the initial phase to grow the pool up to a certain limit, it would not have negative effects in the long run. It is worth noting that due to an initially high burn factor (elaborated upon in subsequent sections), our token will likely outpace the underlying assets should a moderate amount of users transact, and because of this, the amount of reserve tokens we will sell for stablecoins would allow the growth of the pool to continue. Therefore, given the initially high upward pressure on price with the high burn factor \emph{b}, we would prefer to have a growing pool of stablecoins which would constitute a higher proportion, so \emph{s} $>$ \emph{t}, to mitigate the eventual downward trend of whatever is encapsulated within the wrapper (token). This can be a loosely coupled system in the sense that whilst the value of our coin appreciates, we will create a growing pool of stablecoins but the growth factor would be a lower rate than the rewards for our investors, and, should downward movement start, to rebase our coin back to its higher value the stablecoin pool will repurchase our tokens back. We can observe that by setting \emph{p} = \emph{s} + \emph{t} $>$ \emph{r} + \emph{g}, the rebase pool is guaranteed to grow in size in proportion to the total number of tokens, and as a result, it is guaranteed to mimic the underlying assets and act as a mutual fund more closely provided an appropriate algorithm is implemented in the protocol. A permeating problem exists in the fact that market sells of our token itself could force a downward price, thereby depleting our stablecoin pool very quickly in order to rebase it back. We will discuss this once we examine the protocol itself. For the time being, in addition to the above measures to ensure the growth of the rebase pool initially, our protocol will unlock the mutual fund functionality and the rebase itself post-ICO, after a time lock and/or upon surpassing a threshold of tokens and stablecoins that are in reserve. 
+    \vspace{0.15cm}
+    
+    \subsection{Reward Pool and Governance Pool}
+
+    In addition to yield farming, the reward and governance pools serve strictly as a mechanism to reward holders of tokens by accruing rewards from every transaction in a ratio equivalent to their share of the entire token supply or governance token supply. It therefore acts as an incentive for users to hold and as a passive income utility.
+    
+    \subsection{Yield Farming}
+
+    Based on the prior discussion of the rebase pool and the ensuing discussion of the rebase protocol, it is apparent that our token's mechanics would operate more smoothly with a larger stablecoin and reserve token pool. As such, it is an excellent candidate to offer investors the benefits of yield farming. Investors will be able to earn passive income and stake digital assets for rewards whilst the protocol's rebase pool is replenished to a greater degree, thus allowing the token to perform its function of behaving like a mutual fund more closely.  
+
+\section{Oracle-backed Synthetic Wrapper}
+
+    Prior to discussing the rebase protocol in the next section, we take note that in order for it to operate and make decisions, it would require to know the individual prices of the underlying assets in a decentralized fashion at separate instances in time. Since this is contrasted with traditional mutual funds where hedge fund managers are able to fulfill this role or from a standard computer program accessing an index or aggregate index on the internet, an alternative is required to provide a trustless, secure, unbiased, and reliable price feed at any point in time. Since this is the primary purpose of an oracle, it is the utility we leverage.  \par
+    
+    \vspace{0.15cm}
+    It is easiest to illustrate how this works with a generalizable example. Assume our synthetic mutual fund wrapper artificially encapsulates 5 tokens \emph{a}, \emph{b}, \emph{c}, \emph{d}, and \emph{e}, present in percentages of \emph{u} \%, \emph{v} \%, \emph{x} \%, \emph{y} \%, and \emph{z} \%, respectively at the start of an epoch, labelled by timestamp \emph{$t_0$}. At the end of an epoch, labelled by timestamp \emph{$t_1$}, the percentages become \emph{u'} \%, \emph{v'} \%, \emph{x'} \%, \emph{y'} \%, and \emph{z'} \%, respectively. \par
+    
+    \begin{figure}[!htb]
+        \centering
+        \includegraphics[scale=0.4]{wrappers.png}
+        \caption{Calculating Wrapper Value \emph{w}}
+        \label{fig:my_label}
+    \end{figure}    
+    
+    As the figure above illustrates, at any given point in time, the price \emph{w} of a wrapper can be derived by individual queries passed for each token to a set of oracles, followed by an aggregation and averaging of prices dependent on the percentages in which the tokens were present in the original wrapper. We continue with this notation and example in the next section to explain the rebase protocol itself.
+    
+    \par
+    
+
+\section{Rebase Protocol}
+    
+    In the last section, we defined \emph{w} as the price of the synthetic wrapper which encapsulates a set of tokens in their respective percentages at a given point in time. We now define \emph{t} (which is not a timestamp), as the price of the deflationary mutual fund token itself at any given point in time. Using these, we can therefore define the following: \par
+    \begin{flalign}
+    \nonumber
+    &\hspace{1cm} \Delta \emph{t}: percent~change~in~\emph{token value}~=~\frac{t_{t_1}-t_{t_0}}{t_{t_0}}~\cdot~100\% && \\
+    \vspace{0.25cm}
+    \nonumber
+    &\hspace{1cm} \Delta \emph{w}: percent~change~in~\emph{wrapper value}~=~\frac{w_{t_1}-w_{t_0}}{w_{t_0}}~\cdot~100\% &&
+    \end{flalign}
+    In conjunction with what was mentioned in section 3.1 and the above information, we designate two scenarios in which the rebase protocol performs a purchase or sale of reserve tokens with stablecoins: \par
+    \begin{flalign}
+    &\hspace{1cm} \Delta \emph{t}~>~0~and~\Delta \emph{w}~<~0  && \\
+    &\hspace{1cm} \Delta \emph{t}~<~0~and~\Delta \emph{w}~>~0  &&
+    \end{flalign}
+    \indent
+    In the above two cases, the rebase protocol functions as illustrated in figure 4. In the first scenario, reserve tokens in the rebase pool are sold for stablecoins, whereas in the second, stablecoins are used to buy more reserve tokens.  \(Price~t_{t_1}\) is reflective of the final price of the token at the end of an epoch after the rebase that would allow the token to be rebalanced within a threshold $\theta$. $\theta$ serves the purpose of maintaining the ratio between stablecoins and reserve tokens in the rebase pool within 0.5 ± $\theta$ at any given time. Further transactions would create further burns which would allow for the restabilization of the ratio inside the rebase pool until the end of the next epoch. \par
+    
+    \vspace{0.15cm}
+    The discussion of thresholds is especially important here because the reserve pool is obviously only able to influence the price by the proportion of total market capitalization it occupies at the most. The pool can be guaranteed to occupy a large enough proportion with time by slightly adjusting \emph{b} to create a percentage burned from the total supply forever \emph{f}. \emph{f} insures that after a certain amount of time has passed that the rebase pool will occupy any percentage of the market capitalization necessary (say one third). What can then be put in place is a dynamic formula to recalibrate \emph{b} and its components, as well as a governance vote for users to burn the rebase pool as necessary at the end of each epoch if they would like to be less influential on the economics of our coin. A governance vote will also take place on what the wrapper coin encapsulates at any given time. And so, with time, the investment into our coin starts mirroring that of an investment into the underlying more closely (and to any degree necessary).
+    \par
+    \pagebreak
+    
+    \begin{figure}[!htb]
+        \centering
+        \includegraphics[scale=0.65]{peg.png}
+        \caption{Rebasing the Value of the Token at the End of an Epoch}
+        \label{fig:my_label}
+    \end{figure}
+    \pagebreak
+
+    \noindent
+    Now lets consider the following scenarios:
+    \begin{flalign}
+    &\hspace{1cm} \Delta \emph{t}~<~0~and~\Delta \emph{w}~<~0  && \\
+    &\hspace{1cm} \Delta \emph{t}~>~0~and~\Delta \emph{w}~>~0  &&
+    \end{flalign}
+    
+    Our rebase formulas could have simply discarded \emph{t}, which would have created a natural trend to our own coin’s economy in addition to ensuring it is correlated to the underlying wrapped assets. However, on top of the advantage of the prior two mechanics in the previous scenarios mirroring a mutual fund more closely whilst staying within a threshold, especially when the token value itself drops, there are advantages to accounting for \emph{t} in scenarios 3 and 4 as well. In scenario 3 in particular, whilst not much could be done due to natural market movement, in the case that \linebreak $\Delta$ \emph{t} $<$ $\Delta$ \emph{w}, a recalibration will be performed to cushion the drop in value of the token at the end of some epoch whereby a repurchase is performed such that both the ratio of stablecoins to reserve tokens in the rebase pool is maintained at \linebreak 0.5 ± $\theta$ and \emph{$t_{t_1}$} = $~\{~max(t_{t_1})~|~\Delta t \leq \Delta w~\}$ at the end of the epoch to correctly replicate the behaviour of the assets underlying the wrapper. \par
+    
+    \vspace{0.15cm}
+    The last case to consider scenario 4. In such an instance, similar to scenario 3, the rebase pool only buys back tokens if $\Delta$ \emph{t} $<$ $\Delta$ \emph{w}. The optimization conditions are the same: the ratio of stablecoins to reserve tokens in the rebase pool is maintained at 0.5 ± $\theta$ and \emph{$t_{t_1}$} = $~\{~max(t_{t_1})~|~\Delta t \leq \Delta w~\}$. This ensures that when both the token value and the underlying wrapper appreciates, the protocol tries to, at most, match the rate \emph{w} whenever the token appreciates in value less than the synthetic wrapper to the maximal possible degree.
+
+\section{Governance and Proposed Supplementary Token}
+
+    Another consideration of the burn factor \emph{b} comes in the form of an addition of sub-component \emph{g} (governance incentive): \emph{b} (burn percentage) = \emph{r} (reward to holders) + \emph{p} (rebase pool) + \emph{g} (governance incentive) + \emph{f} (forever burnt). A proposed supplementary governance token will have a capped supply. Its purpose is simple - every single supplementary token will function to give voting power over the makeup of the synthetic wrapper at the end of each epoch, how the ratio \emph{f} is adjusted at the end of each epoch, or whether to even, say, set \emph{p} to 0 and force the influence of the rebase pool to drop by programming burns to temporarily take place from the rebase pool as opposed to the traditional supply. The governing power will be a DAO-based decision system, however, an additional incentive to hold this token would be to earn \emph{g} - governance incentive rewards. Before proceeding, in addition to the prospective supplementary tokens having voting power in a ratio of 1:1 with a small capped supply, traditional token ownership should also hold voting power whereby a set multiple of tokens equates to 1 vote so as not to make the token community left out and to not give governance "whales" too much control over the protocol. However, holding each would yield different rewards. \emph{g} $<$ \emph{r} and is proposed to be substantially smaller, for instance in a ratio of 1 : 5 such that \emph{5g} = \emph{r}. The purpose of \emph{g} is therefore to incentivize healthy, decentralized governance over the fund, in addition to introducing a separate mechanic to our overarching protocol whereby users are separated into simple protocol investors, those who are interested in being drivers of the protocol itself, and both.
+
+\section{Deflationary Mechanisms}
+    
+    \subsection{Transaction Burn Rate}
+    
+    \begin{figure}[!htb]
+        \centering
+        \includegraphics[scale=0.45]{txn_burn.png}
+        \caption{Transaction Burn Rate Evolution}
+        \label{fig:my_label}
+    \end{figure}
+    
+    The sub-components of the burn rate \emph{b} and their individual purposes have been priorly described, and we now turn our attention to how the burn rate \emph{b} itself varies with time. We can note from figure 5 that we have divided its evolution into distinct phases \emph{I, II, III, IV, and V} and that there are two symbols \(\theta_1\) and \(\theta_2\). \(\theta_1\) and \(\theta_2\) are representative of the two thresholds for the burn rate, whereby \(\theta_1\) is the maximum possible positive burn rate and \(\theta_2\) is the magnitude of the maximum possible negative rate. However, we can observe that the burn rate cannot actually be negative as per figure 1, and thus instead it means that whilst the burn rate is negative, transaction burns take place from the rebase pool itself (as we have established, this is to recalibrate the proportion of the total supply the rebase pool occupies, and by extension, the influence of the rebase pool itself on the value of the token). The burn rate is thus relative to the replenishment of the rebase pool whereby a positive rate repletes the pool and a negative rate depletes it. This has the advantage of maintaining the reward structure to the users even when they elect to recalibrate what proportion of the overall supply the rebase pool tokens occupy by making it behave less like the simulated mutual fund and more like an individual entity token. \par 
+    \vspace{0.15cm}
+    
+    During phase \emph{I}, the burn rate is maintained at \(\theta_1\) so as to fill the reserves of the rebase pool, and the cut-off time \emph{$t_I$} for phase \emph{I}'s completion in the smart contract can be set to a combination of a time lock and/or determination of whether a set threshold for the ratio of the reserve tokens to the total supply has been surpassed. \par
+    
+    \vspace{0.15cm}
+    
+    At \emph{$t_I$}, the burn rate \emph{b} enters phase \emph{II} and changes from a constant rate \(\theta_1\) to a locked decaying rate for a predetermined, set number of epochs in order to balance out the effects of the supply burn rate (see next section) and to incentivize new buyers. As the completion of phase \emph{II} (or any other subsequent phase) nears, users will have the chance to vote over the last epoch using DAO as to what to set the transaction burn rate to upon the completion of phase \emph{II} at \emph{$t_{II}$}. Assuming users elect to have no change in the progression of the burn rate, the algorithm will not change, otherwise, it can be set to any starting value between -\(\theta_2\) and \(\theta_1\) at \emph{$t_{II}$} and to evolve in either direction. This will be also be the case for \emph{$t_{III}$}, \emph{$t_{IV}$}, and so on, and phases III, IV, and upward will all consist of the same number of epochs. In our illustration in figure 5, we assume users vote to not change the transaction burn rate, however, the dotted lines are representative of two alternative possibilities for the evolution of the transaction burn rate. Although it is not explicitly noted, such possibilities are also present at \emph{$t_{III}$}, \emph{$_{IV}$}, and so on, in addition to \emph{$t_{II}$}
+    
+    \subsection{Supply Evolution}
+    
+    The token supply will have an associated burn as well, in order to provide an additional deflationary pressure on the token value. In a similar fashion to the transaction burn rate, the token supply will initially have a locked supply burn rate for a predetermined set of epochs (which would be at least two quarters in length), whereby the supply of the token will closely follow the following function at the end of each epoch with a preset constant \emph{f}: \par
+    \vspace{0.15cm}
+    \noindent
+
+    {
+    \centering
+    ${supply_{~t+1}}$ = $~\{~f\cdot(supply_{~t})~|~f\in\mathbb{R}:0<f<1\}$
+    
+    \vspace{0.15cm}}
+    
+    \noindent
+    In the above equation, the subscripts of supply \emph{t} and \emph{t+1} denote an epoch start time and the next epoch's start time, respectively. \par
+    
+    \vspace{0.15cm}
+    \indent
+    After this period elapses (refer to figure 6), users will again be able to vote using DAO as to how the supply will further evolve. Of course, in contrast with the continuous transaction burn rate, jump discontinuities will be present in the token supply graph at the end each epoch which average out to what we represent with a continuous curve. However, at the start of each phase, there may be a jump discontinuity in the transaction burn rate graph as opposed to the supply graph: upon the end of the first and all subsequent phases (at \emph{$t_{I}$}, \emph{$t_{II}$}, and so on), after the jump discontinuity in the graph to adjust for the new supply at the end of the last epoch of the phase, there will not be another at the start of the next epoch in the next phase. This is logical since there should be a smooth flow to the supply of the token and as such its burn is restricted solely to the end of an epoch. We note that \emph{$t_{I}$}, \emph{$t_{II}$}, etc. in this graph are different from the prior although there may be overlap. In our example, we assume that users vote to not alter the supply burn rate at \emph{$t_{I}$} and \emph{$t_{II}$}, however, two possibilities of how the supply may evolve at \emph{$t_{I}$} are illustrated by the dotted lines. There are many such possibilities users can vote for at \emph{$t_{I}$}, \emph{$t_{II}$}, and so on, that we did not illustrate, however we demonstrate that, although it would be against deflation, users can vote to mint more tokens should they please to do so or accelerate the burn rate. The sole restriction in place would be the threshold \(\theta\), which is the maximum percentage by which the supply can change from one phase to the next. \par
+    
+    \vspace{1cm}
+    
+    \begin{figure}[!htb]
+        \centering
+        \includegraphics[scale=0.42]{supply.png}
+        \caption{Token Supply Evolution}
+        \label{fig:my_label}
+    \end{figure}
+    
+    \pagebreak
+    
+\section{Generalization Over Multiple Asset Classes}
+
+    Everything discussed thus far details the protocol when considering a single synthetic pooled set of underlying tokens. The next consideration is how to, should the community elect to do so, generalize the single token protocol so that it encapsulates more than one asset class (DeFi tokens, DEX tokens, etc.) whereby any user can choose to stake in a set of particular asset classes as opposed to the protocol itself and gain variable rewards dependent on what is selected. \par
+    
+    \vspace{0.3cm}
+    
+    \begin{figure}[!htb] 
+        \centering
+        \includegraphics[scale=0.5]{overarching.png}
+        \caption{An Encapsulating Wrapper}
+        \label{fig:my_label}
+    \end{figure}
+    
+    This will be a feature available upon election at \emph{$t_{I}$} discussed in section 7.2 (which would be after at least two quarters after token launch). As such, what follows is one possible implementation of the generalization scheme subject to change based on the evolution of the project and user consensus over the first phase. At this juncture we must point out that since there is no hedge fund manager present and this is a decision that influences all users, decisions as to which asset classes to introduce and to eliminate at the end of an epoch will be passed solely if the vote for to vote against ratio is greater than 80\% as opposed to decisions such as which tokens constitute a wrapper, which could have a basic tipping point of 50\%. \par
+    
+    \vspace{0.15cm}
+    
+    Let us now consider the proposed generalization scheme. As figure 7 illustrates, the overarching token wrapper can consist of a second-layer wrapper of first-layer wrappers corresponding to specific asset classes. One token may appear in multiple asset classes, as \emph{b} and \emph{e} do in our example, and we can see that there can be any number of tokens composing an individual asset class wrapper and that there can be any number of these synthetic asset class wrappers within our overarching second-layer  wrapper. Tokens that appear multiple times need be queried for price by the oracles only one time, and the resultant set of query responses is passed to a price aggregator which will generate a set of prices \emph{P} = \emph{\{$W$, $w_A$, $w_B$, ...\}} where \linebreak \emph{W} = $\Sigma^n_{i=1}(w_i \cdot x_i)~|~$\emph{n} = number of first-layer synthetic asset pools, \emph{i} = index of asset pool, \emph{w} = weighted price of an asset pool, \emph{x} = fraction of second-layer wrapper this first-layer wrapper occupies.\par
+    
+    \vspace{0.15cm}
+    
+    Based on our prior discussion of the reasonably strong consensus mechanism for the introduction or removal of new asset classes, it is reasonable to, upon such a decision, have the overarching synthetic wrapper subsume the new set of lower-level wrappers, and as such have the value of the wrapper \emph{W} be dictated by the weights and values of the individual components, since we can assume the vast majority of users agree that the introduction of a new asset class would be a valuable addition to the decentralized mutual fund as a whole. \emph{W} would therefore replace \emph{w} in our discussion of the rebase protocol applied to a single pool of assets in section 5. \par
+    
+    \begin{figure}[!htb]
+        \centering
+        \includegraphics[scale=0.57]{yield.png}
+        \caption{Generalized Scheme Yield Farming}
+        \label{fig:my_label}
+    \end{figure}
+    
+    \vspace{0.15cm}
+    
+    The advantages of offering multiple asset classes are that they diversify the risk and exposure of the mutual fund to the world of cryptocurrencies and that the multiple asset classes offered will allow users to yield farm with variable APYs by staking in a particular set of asset classes. The subsequent figure 8 is illustrative of our proposed tentative scheme for yield farming with the generalized protocol over multiple asset classes. We use notation that we have priorly defined in the paper, and \emph{L} is representative of the layer. It can be noted that the mutual fund token and stablecoin pair yield farm will be available as it has been prior to the introduction of multiple asset classes, however it in itself is broken down into a set of lower layer wrappers for asset classes that are available for farming instead with their own APY rates. Users can make a selection regarding the set of asset classes they would like to stake their tokens into to yield farm. As with most variable rate APY applications, the rates will likely evolve to be evenly distributed, however it can be more advantageous to stake in a particular pool. An interesting consequence of our entire protocol being based on synthetic, non-existent wrappers is that all APY reward rates will be paid out in the same token regardless of what asset class is selected. Lastly, we reiterate that this is just one of many possible and tentative proposals for a generalization scheme.
+    
+    
+    
+
+
+
+
+\end{document}
+
